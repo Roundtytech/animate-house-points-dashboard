@@ -2,26 +2,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>House Points Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     body {
-      background: #111;
+      margin: 0;
+      background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #fff;
-      font-family: Arial, sans-serif;
-      text-align: center;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      height: 100vh;
+      gap: 20px;
+      padding: 20px;
+      box-sizing: border-box;
     }
     .house {
-      background: #222;
-      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       padding: 20px;
-      margin: 20px auto;
-      width: 300px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     }
     img {
-      width: 150px;
-      transition: transform 0.3s ease;
+      height: 150px;
+      transition: transform 1s ease;
     }
     .shake {
       animation: shake 0.5s ease-in-out infinite;
@@ -33,29 +45,34 @@
       75% { transform: scale(1.2) rotate(5deg); }
       100% { transform: scale(1.2) rotate(0deg); }
     }
+    h2 {
+      margin: 10px 0 5px;
+    }
+    .points {
+      font-size: 2em;
+    }
   </style>
 </head>
 <body>
-  <h1>House Points</h1>
   <div class="house" id="aroha">
-    <img src="https://www.dropbox.com/scl/fi/qdx6rcos4b3e31cdu70cb/Aroha.png?rlkey=989stljtr16jk21fvgrtr6y12&st=4c1inpd7&dl=1" />
+    <img src="https://www.dropbox.com/scl/fi/qdx6rcos4b3e31cdu70cb/Aroha.png?rlkey=989stljtr16jk21fvgrtr6y12&st=4c1inpd7&dl=1" alt="Aroha Logo" />
     <h2>Aroha</h2>
-    <p id="points-aroha">Loading...</p>
+    <div class="points" id="points-aroha">Loading...</div>
   </div>
   <div class="house" id="ausdauer">
-    <img src="https://www.dropbox.com/scl/fi/hvy06yytst55hyfwc2n5v/Ausdauer.png?rlkey=3a77j4jt7op3tegq2rsm3cw2c&st=qezv8oae&dl=1" />
+    <img src="https://www.dropbox.com/scl/fi/hvy06yytst55hyfwc2n5v/Ausdauer.png?rlkey=3a77j4jt7op3tegq2rsm3cw2c&st=qezv8oae&dl=1" alt="Ausdauer Logo" />
     <h2>Ausdauer</h2>
-    <p id="points-ausdauer">Loading...</p>
+    <div class="points" id="points-ausdauer">Loading...</div>
   </div>
   <div class="house" id="fidelis">
-    <img src="https://www.dropbox.com/scl/fi/841jlojg98e7n53vnsk57/Fidelis.png?rlkey=3y118itt8y50iprdz2ae7myyg&st=16rfi2xb&dl=1" />
+    <img src="https://www.dropbox.com/scl/fi/841jlojg98e7n53vnsk57/Fidelis.png?rlkey=3y118itt8y50iprdz2ae7myyg&st=16rfi2xb&dl=1" alt="Fidelis Logo" />
     <h2>Fidelis</h2>
-    <p id="points-fidelis">Loading...</p>
+    <div class="points" id="points-fidelis">Loading...</div>
   </div>
   <div class="house" id="isibindi">
-    <img src="https://www.dropbox.com/scl/fi/oqdgpm1c002alot8o1a6p/Isibindi.png?rlkey=38jt4ro3q1o53pn127ynvhucn&st=wwt95txk&dl=1" />
+    <img src="https://www.dropbox.com/scl/fi/oqdgpm1c002alot8o1a6p/Isibindi.png?rlkey=38jt4ro3q1o53pn127ynvhucn&st=wwt95txk&dl=1" alt="Isibindi Logo" />
     <h2>Isibindi</h2>
-    <p id="points-isibindi">Loading...</p>
+    <div class="points" id="points-isibindi">Loading...</div>
   </div>
 
   <script>
@@ -88,14 +105,15 @@
     fetchPoints();
     setInterval(fetchPoints, 10000);
 
-    // Animate all logos every 15 seconds
     setInterval(() => {
       document.querySelectorAll(".house img").forEach((img, i) => {
-        img.style.transition = "transform 1s ease";
-        img.style.transform = "scale(1.2) rotate(10deg)";
         setTimeout(() => {
-          img.style.transform = "scale(1) rotate(0deg)";
-        }, 2000 + i * 200);
+          img.style.transition = "transform 0.6s ease";
+          img.style.transform = "scale(1.2) rotate(10deg)";
+          setTimeout(() => {
+            img.style.transform = "scale(1) rotate(0deg)";
+          }, 1000);
+        }, i * 500);
       });
     }, 15000);
   </script>
