@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-
 exports.handler = async function(event, context) {
   const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0nPiFV37j3yPs1KlRmLJrTK_68qMQYpXE903Y2QM8mczDyvWCC9p5jPAh2aXwRjfwO3iLr567hYkY/pub?gid=278819802&single=true&output=csv";
 
