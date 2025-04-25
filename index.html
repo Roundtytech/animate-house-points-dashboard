@@ -1,9 +1,103 @@
 
 <!DOCTYPE html>
-<html>
-<head><title>House Points Dashboard</title></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>House Points Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    .house {
+      background: #222;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 300px;
+    }
+    img {
+      width: 150px;
+      transition: transform 0.3s ease;
+    }
+    .shake {
+      animation: shake 0.5s ease-in-out infinite;
+    }
+    @keyframes shake {
+      0% { transform: scale(1.2) rotate(0deg); }
+      25% { transform: scale(1.2) rotate(5deg); }
+      50% { transform: scale(1.2) rotate(-5deg); }
+      75% { transform: scale(1.2) rotate(5deg); }
+      100% { transform: scale(1.2) rotate(0deg); }
+    }
+  </style>
+</head>
 <body>
-<h1>House Points</h1>
-<p>Dashboard loaded. Data will appear here when function is active.</p>
+  <h1>House Points</h1>
+  <div class="house" id="aroha">
+    <img src="https://www.dropbox.com/scl/fi/qdx6rcos4b3e31cdu70cb/Aroha.png?rlkey=989stljtr16jk21fvgrtr6y12&st=4c1inpd7&dl=1" />
+    <h2>Aroha</h2>
+    <p id="points-aroha">Loading...</p>
+  </div>
+  <div class="house" id="ausdauer">
+    <img src="https://www.dropbox.com/scl/fi/hvy06yytst55hyfwc2n5v/Ausdauer.png?rlkey=3a77j4jt7op3tegq2rsm3cw2c&st=qezv8oae&dl=1" />
+    <h2>Ausdauer</h2>
+    <p id="points-ausdauer">Loading...</p>
+  </div>
+  <div class="house" id="fidelis">
+    <img src="https://www.dropbox.com/scl/fi/841jlojg98e7n53vnsk57/Fidelis.png?rlkey=3y118itt8y50iprdz2ae7myyg&st=16rfi2xb&dl=1" />
+    <h2>Fidelis</h2>
+    <p id="points-fidelis">Loading...</p>
+  </div>
+  <div class="house" id="isibindi">
+    <img src="https://www.dropbox.com/scl/fi/oqdgpm1c002alot8o1a6p/Isibindi.png?rlkey=38jt4ro3q1o53pn127ynvhucn&st=wwt95txk&dl=1" />
+    <h2>Isibindi</h2>
+    <p id="points-isibindi">Loading...</p>
+  </div>
+
+  <script>
+    async function fetchPoints() {
+      try {
+        const res = await fetch('/.netlify/functions/get-points');
+        const data = await res.json();
+        ['Aroha', 'Ausdauer', 'Fidelis', 'Isibindi'].forEach(house => {
+          const el = document.getElementById(`points-${house.toLowerCase()}`);
+          const logo = document.querySelector(`#${house.toLowerCase()} img`);
+          const current = parseInt(el.innerText) || 0;
+          const newVal = data[house] || 0;
+
+          if (newVal !== current) {
+            logo.classList.add("shake");
+            setTimeout(() => logo.classList.remove("shake"), 5000);
+          }
+
+          el.innerText = newVal;
+
+          if (newVal % 100 === 0 && newVal > 0) {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+          }
+        });
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    }
+
+    fetchPoints();
+    setInterval(fetchPoints, 10000);
+
+    // Animate all logos every 15 seconds
+    setInterval(() => {
+      document.querySelectorAll(".house img").forEach((img, i) => {
+        img.style.transition = "transform 1s ease";
+        img.style.transform = "scale(1.2) rotate(10deg)";
+        setTimeout(() => {
+          img.style.transform = "scale(1) rotate(0deg)";
+        }, 2000 + i * 200);
+      });
+    }, 15000);
+  </script>
 </body>
 </html>
