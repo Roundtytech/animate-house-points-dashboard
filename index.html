@@ -18,6 +18,7 @@
       gap: 20px;
       padding: 20px;
       box-sizing: border-box;
+      position: relative;
     }
     .house {
       border-radius: 15px;
@@ -53,6 +54,23 @@
     .points {
       font-size: 2em;
     }
+    #resetButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      font-size: 16px;
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 68, 68, 0.7);
+      z-index: 1000;
+    }
+    #resetButton:hover {
+      background-color: #cc0000;
+    }
   </style>
 </head>
 <body>
@@ -77,6 +95,8 @@
     <div class="points" id="points-isibindi">0</div>
   </div>
 
+  <button id="resetButton" onclick="confirmReset()">Reset Scores</button>
+
   <script>
     async function fetchPoints() {
       try {
@@ -94,7 +114,7 @@
           }
 
           el.innerText = newVal;
-          
+
           if (newVal % 100 === 0 && newVal > 0) {
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
           }
@@ -104,20 +124,4 @@
       }
     }
 
-    fetchPoints();
-    setInterval(fetchPoints, 10000);
-
-    setInterval(() => {
-      document.querySelectorAll(".house img").forEach((img, i) => {
-        setTimeout(() => {
-          img.style.transition = "transform 1s ease";
-          img.style.transform = "scale(1.2) rotate(10deg)";
-          setTimeout(() => {
-            img.style.transform = "scale(1) rotate(0deg)";
-          }, 1000);
-        }, i * 300);
-      });
-    }, 15000);
-  </script>
-</body>
-</html>
+    fun
