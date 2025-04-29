@@ -54,9 +54,30 @@
     .points {
       font-size: 2em;
     }
+    #winnerBanner {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      color: gold;
+      font-size: 24px;
+      padding: 10px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      z-index: 999;
+    }
+    #winnerBanner span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll 15s linear infinite;
+    }
+    @keyframes scroll {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
     #resetButton {
       position: fixed;
-      bottom: 20px;
+      bottom: 60px;
       right: 20px;
       padding: 15px 20px;
       font-size: 16px;
@@ -95,6 +116,8 @@
     <div class="points" id="points-isibindi">0</div>
   </div>
 
+  <div id="winnerBanner"><span>🏆 Current Leader: Waiting for data... 🏆</span></div>
+
   <button id="resetButton" onclick="confirmReset()">Reset Scores</button>
 
   <script>
@@ -102,6 +125,8 @@
       try {
         const res = await fetch('/.netlify/functions/get-points');
         const data = await res.json();
+        let highest = { house: '', points: -1 };
+
         ['Aroha', 'Ausdauer', 'Fidelis', 'Isibindi'].forEach(house => {
           const el = document.getElementById(`points-${house.toLowerCase()}`);
           const logo = document.querySelector(`#${house.toLowerCase()} img`);
@@ -115,13 +140,42 @@
 
           el.innerText = newVal;
 
+          if (newVal > highest.points) {
+            highest = { house, points: newVal };
+          }
+
           if (newVal % 100 === 0 && newVal > 0) {
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
           }
         });
+
+        document.querySelector("#winnerBanner span").innerText = `🏆 Current Leader: ${highest.house} with ${highest.points} points! 🏆`;
+
       } catch (err) {
         console.error("Fetch error:", err);
       }
     }
 
-    fun
+    function confirmReset() {
+      if (confirm("Are you sure you want to reset all house points?")) {
+        alert("Reset function triggered (coming soon)!");
+      }
+    }
+
+    fetchPoints();
+    setInterval(fetchPoints, 10000);
+
+    setInterval(() => {
+      document.querySelectorAll(".house img").forEach((img, i) => {
+        setTimeout(() => {
+          img.style.transition = "transform 1s ease";
+          img.style.transform = "scale(1.2) rotate(10deg)";
+          setTimeout(() => {
+            img.style.transform = "scale(1) rotate(0deg)";
+          }, 1000);
+        }, i * 300);
+      });
+    }, 15000);
+  </script>
+</body>
+</html>
