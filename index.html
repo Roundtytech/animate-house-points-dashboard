@@ -7,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background: url('https://drive.google.com/uc?id=14XyO-luv-wkkFS4fO0TigeEYUrFFxuRS') no-repeat center center fixed;
       background-size: cover;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #fff;
@@ -92,6 +92,10 @@
     #resetButton:hover {
       background-color: #cc0000;
     }
+    @keyframes rise {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -145,7 +149,7 @@
           }
 
           if (newVal % 100 === 0 && newVal > 0) {
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            confetti({ particleCount: 300, spread: 90, origin: { y: 0.6 } });
             launchBalloons();
           }
         });
@@ -163,32 +167,21 @@
       }
     }
 
-    
-function launchBalloons() {
-  const emoji = "🎈";
-  for (let i = 0; i < 20; i++) {
-    const b = document.createElement("div");
-    b.textContent = emoji;
-    b.style.position = "fixed";
-    b.style.left = Math.random() * 100 + "vw";
-    b.style.bottom = "0";
-    b.style.fontSize = "2rem";
-    b.style.zIndex = 1000;
-    b.style.animation = "rise 4s ease-out forwards";
-    document.body.appendChild(b);
-    setTimeout(() => b.remove(), 4000);
-  }
-}
-
-const style = document.createElement("style");
-style.textContent = `
-  @keyframes rise {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-100vh); opacity: 0; }
-  }
-`;
-document.head.appendChild(style);
-
+    function launchBalloons() {
+      const emoji = "🎈";
+      for (let i = 0; i < 20; i++) {
+        const b = document.createElement("div");
+        b.textContent = emoji;
+        b.style.position = "fixed";
+        b.style.left = Math.random() * 100 + "vw";
+        b.style.bottom = "0";
+        b.style.fontSize = "2rem";
+        b.style.zIndex = 1000;
+        b.style.animation = "rise 4s ease-out forwards";
+        document.body.appendChild(b);
+        setTimeout(() => b.remove(), 4000);
+      }
+    }
 
     fetchPoints();
     setInterval(fetchPoints, 10000);
