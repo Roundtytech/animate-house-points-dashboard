@@ -35,7 +35,7 @@
     #fidelis { background-color: rgba(0, 0, 0, 0.75); }
     #isibindi { background-color: rgba(128, 0, 128, 0.25); }
     img {
-      height: 225px;
+      height: 550px;
       transition: transform 1s ease;
     }
     .shake {
@@ -146,6 +146,7 @@
 
           if (newVal % 100 === 0 && newVal > 0) {
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            launchBalloons();
           }
         });
 
@@ -161,6 +162,33 @@
         alert("Reset function triggered (coming soon)!");
       }
     }
+
+    
+function launchBalloons() {
+  const emoji = "🎈";
+  for (let i = 0; i < 20; i++) {
+    const b = document.createElement("div");
+    b.textContent = emoji;
+    b.style.position = "fixed";
+    b.style.left = Math.random() * 100 + "vw";
+    b.style.bottom = "0";
+    b.style.fontSize = "2rem";
+    b.style.zIndex = 1000;
+    b.style.animation = "rise 4s ease-out forwards";
+    document.body.appendChild(b);
+    setTimeout(() => b.remove(), 4000);
+  }
+}
+
+const style = document.createElement("style");
+style.textContent = `
+  @keyframes rise {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-100vh); opacity: 0; }
+  }
+`;
+document.head.appendChild(style);
+
 
     fetchPoints();
     setInterval(fetchPoints, 10000);
