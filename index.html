@@ -2,150 +2,202 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>House Points Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    #student-banner {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      color: #fff;
-      font-size: 1.5rem;
-      text-align: center;
-      padding: 10px 0;
-      position: fixed;
-      top: 0;
-      z-index: 999;
-    }
     body {
+      margin: 0;
       background: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
       background-size: cover;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding-top: 60px;
+      color: #fff;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
       height: 100vh;
-      gap: 10px;
+      gap: 20px;
+      padding: 20px;
+      box-sizing: border-box;
+      position: relative;
     }
     .house {
-      background-color: rgba(255, 255, 255, 0.85);
-      border-radius: 20px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-      padding: 30px 20px 50px;
+      border-radius: 15px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      margin: 10px;
+      padding: 20px;
+       /* Base transparent background */
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     }
-    .house img {
-      height: 220px;
-      margin-bottom: 20px;
+    #aroha { background-color: rgba(255, 0, 0, 0.25); }
+    #ausdauer { background-color: rgba(0, 128, 0, 0.25); }
+    #fidelis { background-color: rgba(0, 0, 0, 0.5); }
+    #isibindi { background-color: rgba(128, 0, 128, 0.25); }
+    img {
+      height: 150px;
+      transition: transform 1s ease;
     }
-    .house h2 {
-      margin: 10px 0;
-      font-size: 2em;
+    .shake {
+      animation: shake 0.5s ease-in-out infinite;
+    }
+    @keyframes shake {
+      0% { transform: scale(1.2) rotate(0deg); }
+      25% { transform: scale(1.2) rotate(5deg); }
+      50% { transform: scale(1.2) rotate(-5deg); }
+      75% { transform: scale(1.2) rotate(5deg); }
+      100% { transform: scale(1.2) rotate(0deg); }
+    }
+    h2 {
+      margin: 10px 0 5px;
     }
     .points {
-      font-size: 3em;
-      color: #222;
+      font-size: 2em;
     }
-    .platform {
-      position: absolute;
+    #winnerBanner {
+      position: fixed;
       bottom: 0;
-      width: 80%;
-      height: 40px;
-      border-radius: 20px;
-      background: linear-gradient(to top, rgba(255,255,255,0.2), transparent);
-      z-index: -1;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      color: gold;
+      font-size: 24px;
+      padding: 10px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      z-index: 999;
     }
-    #aroha .platform { background: linear-gradient(to top, rgba(255,0,64,0.8), transparent); }
-    #ausdauer .platform { background: linear-gradient(to top, rgba(0,102,255,0.8), transparent); }
-    #fidelis .platform { background: linear-gradient(to top, rgba(0,204,102,0.8), transparent); }
-    #isibindi .platform { background: linear-gradient(to top, rgba(255,204,0,0.8), transparent); }
+    #winnerBanner span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll 15s linear infinite;
+    }
+    @keyframes scroll {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+    #resetButton {
+      position: fixed;
+      bottom: 60px;
+      right: 20px;
+      padding: 15px 20px;
+      font-size: 16px;
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 68, 68, 0.7);
+      z-index: 1000;
+    }
+    #resetButton:hover {
+      background-color: #cc0000;
+    }
+    @keyframes rise {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
   </style>
 </head>
 <body>
-  <div id="student-banner">🏅 Latest Points Earned By: Loading...</div>
-
   <div class="house" id="aroha">
-    <img src="https://www.dropbox.com/scl/fi/qdx6rcos4b3e31cdu70cb/Aroha.png?rlkey=989stljtr16jk21fvgrtr6y12&dl=1" alt="Aroha Logo"/>
+    <img src="https://www.dropbox.com/scl/fi/qdx6rcos4b3e31cdu70cb/Aroha.png?rlkey=989stljtr16jk21fvgrtr6y12&st=4c1inpd7&dl=1" alt="Aroha Logo" />
     <h2>Aroha</h2>
-    <div class="points" id="points-aroha">Loading...</div>
-    <div class="platform"></div>
+    <div class="points" id="points-aroha">0</div>
   </div>
   <div class="house" id="ausdauer">
-    <img src="https://www.dropbox.com/scl/fi/hvy06yytst55hyfwc2n5v/Ausdauer.png?rlkey=3a77j4jt7op3tegq2rsm3cw2c&dl=1" alt="Ausdauer Logo"/>
+    <img src="https://www.dropbox.com/scl/fi/hvy06yytst55hyfwc2n5v/Ausdauer.png?rlkey=3a77j4jt7op3tegq2rsm3cw2c&st=qezv8oae&dl=1" alt="Ausdauer Logo" />
     <h2>Ausdauer</h2>
-    <div class="points" id="points-ausdauer">Loading...</div>
-    <div class="platform"></div>
+    <div class="points" id="points-ausdauer">0</div>
   </div>
   <div class="house" id="fidelis">
-    <img src="https://www.dropbox.com/scl/fi/841jlojg98e7n53vnsk57/Fidelis.png?rlkey=3y118itt8y50iprdz2ae7myyg&dl=1" alt="Fidelis Logo"/>
+    <img src="https://www.dropbox.com/scl/fi/841jlojg98e7n53vnsk57/Fidelis.png?rlkey=3y118itt8y50iprdz2ae7myyg&st=16rfi2xb&dl=1" alt="Fidelis Logo" />
     <h2>Fidelis</h2>
-    <div class="points" id="points-fidelis">Loading...</div>
-    <div class="platform"></div>
+    <div class="points" id="points-fidelis">0</div>
   </div>
   <div class="house" id="isibindi">
-    <img src="https://www.dropbox.com/scl/fi/oqdgpm1c002alot8o1a6p/Isibindi.png?rlkey=38jt4ro3q1o53pn127ynvhucn&dl=1" alt="Isibindi Logo"/>
+    <img src="https://www.dropbox.com/scl/fi/oqdgpm1c002alot8o1a6p/Isibindi.png?rlkey=38jt4ro3q1o53pn127ynvhucn&st=wwt95txk&dl=1" alt="Isibindi Logo" />
     <h2>Isibindi</h2>
-    <div class="points" id="points-isibindi">Loading...</div>
-    <div class="platform"></div>
+    <div class="points" id="points-isibindi">0</div>
   </div>
 
+  <div id="winnerBanner"><span>🏆 Current Leader: Waiting for data... 🏆</span></div>
+
+  <button id="resetButton" onclick="confirmReset()">Reset Scores</button>
+
   <script>
-    
     async function fetchPoints() {
-        const debugBox = document.createElement("div");
-        debugBox.style.position = "fixed";
-        debugBox.style.top = "20px";
-        debugBox.style.left = "50%";
-        debugBox.style.transform = "translateX(-50%)";
-        debugBox.style.background = "#ff4444";
-        debugBox.style.color = "#fff";
-        debugBox.style.padding = "12px 20px";
-        debugBox.style.borderRadius = "8px";
-        debugBox.style.zIndex = "9999";
-        debugBox.style.fontSize = "18px";
-        debugBox.style.fontWeight = "bold";
-        debugBox.innerText = "Fetching points data...";
-        document.body.appendChild(debugBox);
+      try {
+        const res = await fetch('/.netlify/functions/get-points');
+        const data = await res.json();
+        let highest = { house: '', points: -1 };
 
-        try {
-            const response = await fetch("https://script.google.com/macros/s/AKfycbyZ-IyEQWbUYROMyTgh3Waht0BNDvdJZMmIy0DXKNOq4dvmaQdJBV2MjoFFtNlk7DST/exec");
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-            const json = await response.json();
-            const totals = json;
+        ['Aroha', 'Ausdauer', 'Fidelis', 'Isibindi'].forEach(house => {
+          const el = document.getElementById(`points-${house.toLowerCase()}`);
+          const logo = document.querySelector(`#${house.toLowerCase()} img`);
+          const current = parseInt(el.innerText) || 0;
+          const newVal = data[house] ?? 0;
 
-            ['Aroha', 'Ausdauer', 'Fidelis', 'Isibindi'].forEach(house => {
-              const element = document.getElementById(`points-${house.toLowerCase()}`);
-              const points = totals[house] || 0;
-              element.innerText = points;
+          if (newVal !== current) {
+            logo.classList.add("shake");
+            setTimeout(() => logo.classList.remove("shake"), 5000);
+          }
 
-              if (points % 100 === 0 && points > 0) {
-                element.style.color = '#e60073';
-                element.innerText += " 🎉";
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-              }
-            });
+          el.innerText = newVal;
 
-            const studentBanner = document.getElementById("student-banner");
-            studentBanner.innerText = "🏅 Latest Points Earned By: " + (totals["lastStudent"] || "N/A");
+          if (newVal > highest.points) {
+            highest = { house, points: newVal };
+          }
 
-            debugBox.innerText = "Points loaded successfully ✅";
-            debugBox.style.background = "#28a745";
-        } catch (error) {
-            debugBox.innerText = "Fetch Error: " + error.message;
-            console.error("Data fetch failed:", error);
-        }
+          if (newVal % 100 === 0 && newVal > 0) {
+            confetti({ particleCount: 500, spread: 90, origin: { y: 0.6 } });
+            launchBalloons();
+          }
+        });
+
+        document.querySelector("#winnerBanner span").innerText = `🏆 Current Leader: ${highest.house} with ${highest.points} points! 🏆`;
+
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    }
+
+    function confirmReset() {
+      if (confirm("Are you sure you want to reset all house points?")) {
+        alert("Reset function triggered (coming soon)!");
+      }
+    }
+
+    function launchBalloons() {
+      const emoji = "🎈";
+      for (let i = 0; i < 40; i++) {
+        const b = document.createElement("div");
+        b.textContent = emoji;
+        b.style.position = "fixed";
+        b.style.left = Math.random() * 100 + "vw";
+        b.style.bottom = "0";
+        b.style.fontSize = "2rem";
+        b.style.zIndex = 1000;
+        b.style.animation = "rise 4s ease-out forwards";
+        document.body.appendChild(b);
+        setTimeout(() => b.remove(), 4000);
+      }
     }
 
     fetchPoints();
     setInterval(fetchPoints, 10000);
 
+    setInterval(() => {
+      document.querySelectorAll(".house img").forEach((img, i) => {
+        setTimeout(() => {
+          img.style.transition = "transform 1s ease";
+          img.style.transform = "scale(1.2) rotate(10deg)";
+          setTimeout(() => {
+            img.style.transform = "scale(1) rotate(0deg)";
+          }, 1000);
+        }, i * 300);
+      });
+    }, 15000);
   </script>
 </body>
 </html>
